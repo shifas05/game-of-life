@@ -2,7 +2,47 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [grid, setGrid] = useState(new Array(30).fill(null).map(() => new Array(30).fill(0).map(() => Math.round(Math.random()))));
+
+
+   // R-Pentomino pattern.
+  // const pattern = [
+  //   [0, 0, 0, 0, 0],
+  //   [0, 0, 1, 1, 0],
+  //   [0, 1, 1, 0, 0],
+  //   [0, 0, 1, 0, 0],
+  //   [0, 0, 0, 0, 0]
+  // ];
+
+    // Pulsar pattern.
+  const pattern = [
+    [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+    [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0]
+  ];
+
+  // Creates an empty 20x20 grid.
+  const emptyGrid = Array(50).fill().map(() => Array(100).fill(0));
+
+  // Inserts the R-Pentomino pattern into the middle of the grid.
+  for (let i = 0; i < pattern.length; i++) {
+    for (let j = 0; j < pattern[i].length; j++) {
+      emptyGrid[i + 20][j + 40] = pattern[i][j];
+    }
+  }
+
+  // Initializes the state with the pattern in the grid.
+  const [grid, setGrid] = useState(emptyGrid);
+
   const [running, setRunning] = useState(false);
 
   const nextGridState = (gridProp) => {
@@ -19,12 +59,12 @@ function App() {
       return row.map((cell, j) => {
         let liveNeighbors = 0;
         directions.forEach(([x, y]) => { 
-          let newRow = i + x;
-          let newCol =  j+y;
+          let newRow = (i + x + gridCopy.length) % gridCopy.length;
+          let newCol = (j + y + gridCopy[0].length) % gridCopy[0].length;
           
-          if(newRow >= 0 && newRow < gridCopy.length && newCol >= 0 && newCol < gridCopy.length){
+          // if(newRow >= 0 && newRow < gridCopy.length && newCol >= 0 && newCol < gridCopy.length){
             liveNeighbors += gridCopy[newRow][newCol] ? 1 : 0;
-          }
+          // }
 
         });
 
